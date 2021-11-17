@@ -19,7 +19,7 @@
             <tr>
               <th nowrap>従業員名</th>
               <td>
-                <span v-html="this.currentEmployee.name"></span>
+                <span v-bind="this.currentEmployee.data.employee.name"></span>
               </td>
             </tr>
             <tr>
@@ -31,47 +31,62 @@
             <tr>
               <th nowrap>性別</th>
               <td>
-                <span v-html="this.currentEmployee.gender"></span>
+                <span v-bind="this.currentEmployee.data.employee.gender"></span>
               </td>
             </tr>
             <tr>
               <th nowrap>入社日</th>
               <td>
-                <span v-html="this.currentEmployee.hireDate"></span>
+                <span
+                  v-bind="this.currentEmployee.data.employee.hireDate"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>メールアドレス</th>
               <td>
-                <span v-html="this.currentEmployee.mailAddress"></span>
+                <span
+                  v-bind="this.currentEmployee.data.employee.mailAddress"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>郵便番号</th>
               <td>
-                <span v-html="this.currentEmployee.zipCode"></span>
+                <span
+                  v-bind="this.currentEmployee.data.employee.zipCode"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>住所</th>
               <td>
-                <span v-html="this.currentEmployee.address"></span>
+                <span
+                  v-bind="this.currentEmployee.data.employee.address"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>電話番号</th>
               <td>
-                <span v-html="this.currentEmployee.telephone"></span>
+                <span
+                  v-bind="this.currentEmployee.data.employee.telephone"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>給料</th>
-              <td><span v-html="this.currentEmployee.getSalary"></span>円</td>
+              <td>
+                <span v-bind="this.currentEmployee.data.employee.salary"></span
+                >円
+              </td>
             </tr>
             <tr>
               <th nowrap>特性</th>
               <td>
-                <span v-html="this.currentEmployee.characteristics"></span>
+                <span
+                  v-bind="this.currentEmployee.data.employee.characteristics"
+                ></span>
               </td>
             </tr>
             <tr>
