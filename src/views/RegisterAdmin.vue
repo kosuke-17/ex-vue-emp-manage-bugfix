@@ -59,6 +59,7 @@
               class="btn btn-large btn-register waves-effect waves-light"
               type="button"
               v-on:click="registerAdmin"
+              :disabled="flag"
             >
               登録
               <i class="material-icons right">done</i>
@@ -93,6 +94,9 @@ export default class RegisterAdmin extends Vue {
   private errorMessage = '';
   private uniqueErrorMessage = '';
 
+  // 真偽値用の変数
+  private flag = false;
+
   /**
    * 管理者情報を登録する.
    *
@@ -121,6 +125,13 @@ export default class RegisterAdmin extends Vue {
       this.errorMessage =
         'パスワードが未入力です。全ての入力欄を記入してください';
       return;
+    }
+
+    // 演習1-4 ダブルサブミット対策
+    if (this.flag) {
+      this.flag = false;
+    } else {
+      this.flag = true;
     }
 
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
