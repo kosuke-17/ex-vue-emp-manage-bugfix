@@ -4,8 +4,10 @@
     <nav>
       <div class="nav-wrapper">
         <div class="col s12 teal">
-          <a class="breadcrumb">従業員リスト</a>
-          <a class="breadcrumb">従業員詳細</a>
+          <router-link class="breadcrumb" to="/employeeList"
+            >従業員リスト</router-link
+          >
+          <router-link class="breadcrumb">従業員詳細</router-link>
         </div>
       </div>
     </nav>
@@ -146,7 +148,7 @@ export default class EmployeeDetail extends Vue {
     'XXXX',
     0
   );
-  // currentEmployee!: Employee;
+  private getCurrentEmployee!: Employee;
   // エラーメッセージ
   private errorMessage = '';
   // 画像
@@ -167,15 +169,31 @@ export default class EmployeeDetail extends Vue {
     const employeeId = parseInt(this.$route.params.id);
 
     // VuexストアのGetter、getEmployeeById()メソッドに先ほど取得したIDを渡し、１件の従業員情報を取得し、戻り値をcurrentEmployee属性に代入する
-    this.currentEmployee = await axios.get(
+    this.getCurrentEmployee = await axios.get(
       `${config.EMP_WEBAPI_URL}/employee/${employeeId}`
     );
 
+    this.currentEmployee = new Employee(
+      this.getCurrentEmployee.data.employee.id,
+      this.getCurrentEmployee.data.employee.name,
+      this.getCurrentEmployee.data.employee.image,
+      this.getCurrentEmployee.data.employee.gender,
+      new Date(this.getCurrentEmployee.data.employee.hireDate),
+      this.getCurrentEmployee.data.employee.mailAddress,
+      this.getCurrentEmployee.data.employee.zipCode,
+      this.getCurrentEmployee.data.employee.address,
+      this.getCurrentEmployee.data.employee.telephone,
+      this.getCurrentEmployee.data.employee.salary,
+      this.getCurrentEmployee.data.employee.characteristics,
+      this.getCurrentEmployee.data.employee.dependentsCount
+    );
+    console.log(JSON.stringify(this.currentEmployee));
+
     // 今取得した従業員情報から画像パスを取り出し、imgディレクトリの名前を前に付与(文字列連結)してcurrentEmployeeImage属性に代入する
-    this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.data.employee.image}`;
+    this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.image}`;
 
     // 今取得した従業員情報から扶養人数を取り出し、currentDependentsCount属性に代入する
-    this.currentDependentsCount = this.currentEmployee.data.employee.dependentsCount;
+    this.currentDependentsCount = this.currentEmployee.dependentsCount;
   }
 
   /**
