@@ -102,14 +102,22 @@ export default class RegisterAdmin extends Vue {
     // 管理者登録処理
 
     // 演習1-2 未入力の場合、処理終了
-    if (
-      this.lastName == '' ||
-      this.firstName == '' ||
-      this.mailAddress == '' ||
-      this.password == ''
-    ) {
+    if (this.lastName == '') {
+      this.errorMessage = '姓の欄が未入力です。全ての入力欄を記入してください';
+      return;
+    }
+    if (this.firstName == '') {
+      this.errorMessage = '名が未入力です。全ての入力欄を記入してください';
+      return;
+    }
+    if (this.mailAddress == '') {
       this.errorMessage =
-        '未入力の欄があります。全ての入力欄を記入してください';
+        'メールアドレスが未入力です。全ての入力欄を記入してください';
+      return;
+    }
+    if (this.password == '') {
+      this.errorMessage =
+        'パスワードが未入力です。全ての入力欄を記入してください';
       return;
     }
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
