@@ -34,7 +34,7 @@
             </tr>
             <tr>
               <th nowrap>入社日</th>
-              <td><span v-html="currentEmployee.hireDate"></span></td>
+              <td><span v-html="currentEmployee.formatHireDate"></span></td>
             </tr>
             <tr>
               <th nowrap>メールアドレス</th>
@@ -102,10 +102,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import config from "@/const/const";
-import { Employee } from "@/types/employee";
-import axios from "axios";
+import { Component, Vue } from 'vue-property-decorator';
+import config from '@/const/const';
+import { Employee } from '@/types/employee';
+import axios from 'axios';
 
 /**
  * 従業員詳細を表示する画面.
@@ -116,23 +116,23 @@ export default class EmployeeDetail extends Vue {
   // 初期値で初期化しなければtemplateでidなどが存在しないということでエラーとなる
   private currentEmployee = new Employee(
     0,
-    "XXXX",
-    "/noImage.png",
-    "XXXX",
+    'XXXX',
+    '/noImage.png',
+    'XXXX',
     new Date(2020, 0, 1),
-    "XXXX",
-    "XXXX",
-    "XXXX",
-    "XXXX",
+    'XXXX',
+    'XXXX',
+    'XXXX',
+    'XXXX',
     0,
-    "XXXX",
+    'XXXX',
     0
   );
   // currentEmployee!: Employee;
   // エラーメッセージ
-  private errorMessage = "";
+  private errorMessage = '';
   // 画像
-  private currentEmployeeImage = "";
+  private currentEmployeeImage = '';
   // 扶養人数
   private currentDependentsCount = 0;
 
@@ -153,7 +153,7 @@ export default class EmployeeDetail extends Vue {
 
     // 今取得した従業員情報から画像パスを取り出し、imgディレクトリの名前を前に付与(文字列連結)してcurrentEmployeeImage属性に代入する
     this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.image}`;
-    
+
     // 今取得した従業員情報から扶養人数を取り出し、currentDependentsCount属性に代入する
     this.currentDependentsCount = this.currentEmployee.dependentsCount;
   }
@@ -172,14 +172,14 @@ export default class EmployeeDetail extends Vue {
         dependentsCount: this.currentDependentsCount,
       }
     );
-    console.dir("response:" + JSON.stringify(response));
+    console.dir('response:' + JSON.stringify(response));
 
-    if (response.data.status === "success") {
+    if (response.data.status === 'success') {
       // 成功なら従業員一覧画面に遷移する
-      this.$router.push("/employeeList");
+      this.$router.push('/employeeList');
     } else {
       // 失敗ならエラーメッセージを表示する
-      this.errorMessage = "更新できませんでした(" + response.data.message + ")";
+      this.errorMessage = '更新できませんでした(' + response.data.message + ')';
     }
   }
 }
