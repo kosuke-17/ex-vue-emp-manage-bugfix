@@ -4,6 +4,7 @@
       <form class="col s12" id="reg-form">
         <div class="error-message">
           {{ errorMessage }}
+          {{ uniqueErrorMessage }}
         </div>
         <div class="row">
           <div class="input-field col s6">
@@ -90,6 +91,7 @@ export default class RegisterAdmin extends Vue {
 
   // エラーメッセージ
   private errorMessage = '';
+  private uniqueErrorMessage = '';
 
   /**
    * 管理者情報を登録する.
@@ -120,6 +122,7 @@ export default class RegisterAdmin extends Vue {
         'パスワードが未入力です。全ての入力欄を記入してください';
       return;
     }
+
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
       name: this.lastName + ' ' + this.firstName,
       mailAddress: this.mailAddress,
@@ -127,8 +130,14 @@ export default class RegisterAdmin extends Vue {
     });
     console.dir('response:' + JSON.stringify(response));
 
-    //演習1-1 管理者登録成功後の遷移先をログイン画面に変更
-    this.$router.push('/loginAdmin');
+    //演習1-3 メールの重複があったら登録できないエラーメッセージを出す。
+    if (response.data.status === 'success') {
+      //演習1-1 管理者登録成功後の遷移先をログイン画面に変更
+      this.$router.push('/loginAdmin');
+    } else if (response.data.status === 'error') {
+      this.uniqueErrorMessage = '登録できませんでした';
+      return;
+    }
   }
 }
 </script>
