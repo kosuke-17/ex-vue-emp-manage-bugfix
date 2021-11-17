@@ -54,12 +54,24 @@
           </div>
         </div>
         <div class="row">
+          <div class="input-field col s12">
+            <input
+              id="comfirmPassword"
+              type="password"
+              class="validate"
+              minlength="8"
+              v-model="comfirmPassword"
+              required
+            />
+            <label for="comfirmPassword">確認パスワード</label>
+          </div>
+        </div>
+        <div class="row">
           <div class="input-field col s6">
             <button
               class="btn btn-large btn-register waves-effect waves-light"
               type="button"
               v-on:click="registerAdmin"
-              :disabled="flag"
             >
               登録
               <i class="material-icons right">done</i>
@@ -89,13 +101,12 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = '';
   // パスワード
   private password = '';
+  // パスワード
+  private comfirmPassword = '';
 
   // エラーメッセージ
   private errorMessage = '';
   private uniqueErrorMessage = '';
-
-  // 真偽値用の変数
-  private flag = false;
 
   /**
    * 管理者情報を登録する.
@@ -126,12 +137,11 @@ export default class RegisterAdmin extends Vue {
         'パスワードが未入力です。全ての入力欄を記入してください';
       return;
     }
-
-    // 演習1-4 ダブルサブミット対策
-    if (this.flag) {
-      this.flag = false;
-    } else {
-      this.flag = true;
+    if (this.password != this.comfirmPassword) {
+      this.errorMessage = 'パスワードと確認パスワードが一致しません';
+      this.password = '';
+      this.comfirmPassword = '';
+      return;
     }
 
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
