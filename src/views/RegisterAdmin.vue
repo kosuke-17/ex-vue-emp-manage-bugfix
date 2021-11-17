@@ -2,6 +2,9 @@
   <div class="container">
     <div class="row register-page">
       <form class="col s12" id="reg-form">
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
         <div class="row">
           <div class="input-field col s6">
             <input
@@ -85,6 +88,9 @@ export default class RegisterAdmin extends Vue {
   // パスワード
   private password = '';
 
+  // エラーメッセージ
+  private errorMessage = '';
+
   /**
    * 管理者情報を登録する.
    *
@@ -94,6 +100,18 @@ export default class RegisterAdmin extends Vue {
    */
   async registerAdmin(): Promise<void> {
     // 管理者登録処理
+
+    // 演習1-2 未入力の場合、処理終了
+    if (
+      this.lastName == '' ||
+      this.firstName == '' ||
+      this.mailAddress == '' ||
+      this.password == ''
+    ) {
+      this.errorMessage =
+        '未入力の欄があります。全ての入力欄を記入してください';
+      return;
+    }
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
       name: this.lastName + ' ' + this.firstName,
       mailAddress: this.mailAddress,
@@ -110,5 +128,8 @@ export default class RegisterAdmin extends Vue {
 <style scoped>
 .register-page {
   width: 600px;
+}
+.error-message {
+  color: red;
 }
 </style>
