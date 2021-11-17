@@ -17,7 +17,7 @@
             <tr>
               <th nowrap>従業員名</th>
               <td>
-                <span v-html="currentEmployee.name"></span>
+                <span v-html="this.currentEmployee.data.employee.name"></span>
               </td>
             </tr>
             <tr>
@@ -29,45 +29,62 @@
             <tr>
               <th nowrap>性別</th>
               <td>
-                <span v-html="currentEmployee.gender"></span>
+                <span v-html="this.currentEmployee.data.employee.gender"></span>
               </td>
             </tr>
             <tr>
               <th nowrap>入社日</th>
-              <td><span v-html="currentEmployee.hireDate"></span></td>
+              <td>
+                <span
+                  v-html="this.currentEmployee.data.employee.hireDate"
+                ></span>
+              </td>
             </tr>
             <tr>
               <th nowrap>メールアドレス</th>
               <td>
-                <span v-html="currentEmployee.mailAddress"></span>
+                <span
+                  v-html="this.currentEmployee.data.employee.mailAddress"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>郵便番号</th>
               <td>
-                <span v-html="currentEmployee.zipCode"></span>
+                <span
+                  v-html="this.currentEmployee.data.employee.zipCode"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>住所</th>
               <td>
-                <span v-html="currentEmployee.address"></span>
+                <span
+                  v-html="this.currentEmployee.data.employee.address"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>電話番号</th>
               <td>
-                <span v-html="currentEmployee.telephone"></span>
+                <span
+                  v-html="this.currentEmployee.data.employee.telephone"
+                ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>給料</th>
-              <td><span v-html="currentEmployee.salary"></span>円</td>
+              <td>
+                <span v-html="this.currentEmployee.data.employee.salary"></span
+                >円
+              </td>
             </tr>
             <tr>
               <th nowrap>特性</th>
               <td>
-                <span v-html="currentEmployee.characteristics"></span>
+                <span
+                  v-html="this.currentEmployee.data.employee.characteristics"
+                ></span>
               </td>
             </tr>
             <tr>
@@ -102,10 +119,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import config from "@/const/const";
-import { Employee } from "@/types/employee";
-import axios from "axios";
+import { Component, Vue } from 'vue-property-decorator';
+import config from '@/const/const';
+import { Employee } from '@/types/employee';
+import axios from 'axios';
 
 /**
  * 従業員詳細を表示する画面.
@@ -114,25 +131,26 @@ import axios from "axios";
 export default class EmployeeDetail extends Vue {
   // 従業員情報
   // 初期値で初期化しなければtemplateでidなどが存在しないということでエラーとなる
+
   private currentEmployee = new Employee(
     0,
-    "XXXX",
-    "/noImage.png",
-    "XXXX",
+    'XXXX',
+    '/noImage.png',
+    'XXXX',
     new Date(2020, 0, 1),
-    "XXXX",
-    "XXXX",
-    "XXXX",
-    "XXXX",
+    'XXXX',
+    'XXXX',
+    'XXXX',
+    'XXXX',
     0,
-    "XXXX",
+    'XXXX',
     0
   );
   // currentEmployee!: Employee;
   // エラーメッセージ
-  private errorMessage = "";
+  private errorMessage = '';
   // 画像
-  private currentEmployeeImage = "";
+  private currentEmployeeImage = '';
   // 扶養人数
   private currentDependentsCount = 0;
 
@@ -144,18 +162,20 @@ export default class EmployeeDetail extends Vue {
    * Vuexストア内のGetterを呼ぶ。
    * ライフサイクルフックのcreatedイベント利用
    */
-  created(): void {
+  async created(): Promise<void> {
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
     const employeeId = parseInt(this.$route.params.id);
 
     // VuexストアのGetter、getEmployeeById()メソッドに先ほど取得したIDを渡し、１件の従業員情報を取得し、戻り値をcurrentEmployee属性に代入する
-    this.currentEmployee = this.$store.getters.getEmployeeById(employeeId);
+    this.currentEmployee = await axios.get(
+      `${config.EMP_WEBAPI_URL}/employee/${employeeId}`
+    );
 
     // 今取得した従業員情報から画像パスを取り出し、imgディレクトリの名前を前に付与(文字列連結)してcurrentEmployeeImage属性に代入する
-    this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.image}`;
-    
+    this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.data.employee.image}`;
+
     // 今取得した従業員情報から扶養人数を取り出し、currentDependentsCount属性に代入する
-    this.currentDependentsCount = this.currentEmployee.dependentsCount;
+    this.currentDependentsCount = this.currentEmployee.data.employee.dependentsCount;
   }
 
   /**
@@ -172,14 +192,14 @@ export default class EmployeeDetail extends Vue {
         dependentsCount: this.currentDependentsCount,
       }
     );
-    console.dir("response:" + JSON.stringify(response));
+    console.dir('response:' + JSON.stringify(response));
 
-    if (response.data.status === "success") {
+    if (response.data.status === 'success') {
       // 成功なら従業員一覧画面に遷移する
-      this.$router.push("/employeeList");
+      this.$router.push('/employeeList');
     } else {
       // 失敗ならエラーメッセージを表示する
-      this.errorMessage = "更新できませんでした(" + response.data.message + ")";
+      this.errorMessage = '更新できませんでした(' + response.data.message + ')';
     }
   }
 }

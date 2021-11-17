@@ -1,9 +1,9 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import { Employee } from "@/types/employee";
-import config from "@/const/const";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { Employee } from '@/types/employee';
+import config from '@/const/const';
 // 使うためには「npm install axios --save」を行う
-import axios from "axios";
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -25,13 +25,13 @@ export default new Vuex.Store({
         `${config.EMP_WEBAPI_URL}/employee/employees`
       );
       // 取得したJSONデータをコンソールに出力して確認
-      console.dir("response:" + JSON.stringify(response));
+      // console.dir("response:" + JSON.stringify(response));
       // 取得したresponseデータの中のdataを取り出してpayload変数に格納する
       const payload = response.data;
       // showEmployeeListという名前のミューテーションを呼び出す
       // (contextオブジェクトのcommitメソッドを呼び出す)
       // その際、先程payload変数に格納したデータを第２引数に渡す
-      context.commit("showEmployeeList", payload);
+      context.commit('showEmployeeList', payload);
     },
   }, // end actions
   mutations: {
@@ -43,7 +43,7 @@ export default new Vuex.Store({
      */
     showEmployeeList(state, payload) {
       // console.dir("payload:" + JSON.stringify(payload));
-      console.log("totalEmployeeCount:" + payload.totalEmployeeCount);
+      // console.log("totalEmployeeCount:" + payload.totalEmployeeCount);
       // payloadの中(WebAPIから取得したJSON)のtotalEmployeeCountをstateのtotalEmployeeCountに代入する
       state.totalEmployeeCount = payload.totalEmployeeCount;
       // payloadの中(WebAPIから取得したJSON)のemployeesをstateのemployeesに代入する
