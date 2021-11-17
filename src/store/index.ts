@@ -25,7 +25,8 @@ export default new Vuex.Store({
         `${config.EMP_WEBAPI_URL}/employee/employees`
       );
       // 取得したJSONデータをコンソールに出力して確認
-      // console.dir("response:" + JSON.stringify(response));
+      console.dir('response:' + JSON.stringify(response));
+
       // 取得したresponseデータの中のdataを取り出してpayload変数に格納する
       const payload = response.data;
       // showEmployeeListという名前のミューテーションを呼び出す
@@ -43,7 +44,8 @@ export default new Vuex.Store({
      */
     showEmployeeList(state, payload) {
       // console.dir("payload:" + JSON.stringify(payload));
-      // console.log("totalEmployeeCount:" + payload.totalEmployeeCount);
+      console.log('totalEmployeeCount:' + payload.totalEmployeeCount);
+
       // payloadの中(WebAPIから取得したJSON)のtotalEmployeeCountをstateのtotalEmployeeCountに代入する
       state.totalEmployeeCount = payload.totalEmployeeCount;
       // payloadの中(WebAPIから取得したJSON)のemployeesをstateのemployeesに代入する
@@ -70,6 +72,19 @@ export default new Vuex.Store({
           )
         );
       }
+      // 演習3-1 入社日が遅い順に従業員を表示していくためsortしている
+      state.employees.sort(function(employeeA, employeeB) {
+        const hireDateA = employeeA.hireDate;
+        const hireDateB = employeeB.hireDate;
+        if (hireDateA < hireDateB) {
+          return 1;
+        }
+        if (hireDateA > hireDateB) {
+          return -1;
+        }
+
+        return 0;
+      });
     },
   }, // end mutations
   getters: {

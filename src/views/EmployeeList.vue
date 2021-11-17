@@ -11,6 +11,15 @@
     <div v-for="(num, i) of getPageNum" :key="i">
       <button type="button" @click="onchangepage(num)">{{ num }}</button>
     </div>
+    <div>
+      <form class="search">
+        <input type="text" v-model="inputName" />
+        <br />
+      </form>
+      <button @click="searchEmployee(inputName)">従業員検索</button>
+    </div>
+    {{ searchedMessage }}
+
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <div class="row">
       <table class="striped">
@@ -50,8 +59,14 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+
   // ページの初期値
   private pageNum = 1;
+  
+  //名前検索用の入力変数
+  private inputName = '';
+  private searchedMessage = '';
+
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -91,6 +106,24 @@ export default class EmployeeList extends Vue {
       selectedPageNum
     );
   }
+
+  /**
+   * 名前検索をする
+   *
+   *
+   */
+  searchEmployee(name: string): void {
+    if (this.inputName == '') {
+      this.searchedMessage = '１件もありませんでしたので全件表示をします';
+      this.currentEmployeeList = this['$store'].getters.getAllEmployees;
+      return;
+    }
+    //
+    this.currentEmployeeList = this['$store'].getters.getSearchEmployeeByName(
+      name
+    );
+    // this.currentEmployeeList =this['$store'].getters.getAllEmployees;
+  }
 }
 </script>
 
@@ -105,5 +138,8 @@ export default class EmployeeList extends Vue {
   display: block;
   width: 150px;
   margin: 0 auto;
+}
+.search {
+  border: 1px solid black;
 }
 </style>
