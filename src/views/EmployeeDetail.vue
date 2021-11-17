@@ -4,7 +4,7 @@
     <nav>
       <div class="nav-wrapper">
         <div class="col s12 teal">
-          <a class="breadcrumb">従業員リスト</a>
+          <a class="breadcrumb" href="/employeeList">従業員リスト</a>
           <a class="breadcrumb">従業員詳細</a>
         </div>
       </div>
