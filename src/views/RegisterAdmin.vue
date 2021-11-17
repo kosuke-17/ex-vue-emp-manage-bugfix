@@ -67,9 +67,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import config from "@/const/const";
-import axios from "axios";
+import { Component, Vue } from 'vue-property-decorator';
+import config from '@/const/const';
+import axios from 'axios';
 
 /**
  * 管理者登録をする画面.
@@ -77,13 +77,13 @@ import axios from "axios";
 @Component
 export default class RegisterAdmin extends Vue {
   // 姓
-  private lastName = "";
+  private lastName = '';
   // 名
-  private firstName = "";
+  private firstName = '';
   // メールアドレス
-  private mailAddress = "";
+  private mailAddress = '';
   // パスワード
-  private password = "";
+  private password = '';
 
   /**
    * 管理者情報を登録する.
@@ -95,13 +95,14 @@ export default class RegisterAdmin extends Vue {
   async registerAdmin(): Promise<void> {
     // 管理者登録処理
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
-      name: this.lastName + " " + this.firstName,
+      name: this.lastName + ' ' + this.firstName,
       mailAddress: this.mailAddress,
       password: this.password,
     });
-    console.dir("response:" + JSON.stringify(response));
+    console.dir('response:' + JSON.stringify(response));
 
-    this.$router.push("/employeeList");
+    //演習1-1 管理者登録成功後の遷移先をログイン画面に変更
+    this.$router.push('/loginAdmin');
   }
 }
 </script>
