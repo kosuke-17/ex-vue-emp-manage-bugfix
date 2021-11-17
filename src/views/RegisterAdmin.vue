@@ -2,6 +2,10 @@
   <div class="container">
     <div class="row register-page">
       <form class="col s12" id="reg-form">
+        <div class="error-message">
+          {{ errorMessage }}
+          {{ uniqueErrorMessage }}
+        </div>
         <div class="row">
           <div class="input-field col s6">
             <input
@@ -50,6 +54,19 @@
           </div>
         </div>
         <div class="row">
+          <div class="input-field col s12">
+            <input
+              id="comfirmPassword"
+              type="password"
+              class="validate"
+              minlength="8"
+              v-model="comfirmPassword"
+              required
+            />
+            <label for="comfirmPassword">確認パスワード</label>
+          </div>
+        </div>
+        <div class="row">
           <div class="input-field col s6">
             <button
               class="btn btn-large btn-register waves-effect waves-light"
@@ -84,6 +101,12 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = '';
   // パスワード
   private password = '';
+  // パスワード
+  private comfirmPassword = '';
+
+  // エラーメッセージ
+  private errorMessage = '';
+  private uniqueErrorMessage = '';
 
   /**
    * 管理者情報を登録する.
@@ -94,6 +117,33 @@ export default class RegisterAdmin extends Vue {
    */
   async registerAdmin(): Promise<void> {
     // 管理者登録処理
+
+    // 演習1-2 未入力の場合、処理終了
+    if (this.lastName == '') {
+      this.errorMessage = '姓の欄が未入力です。全ての入力欄を記入してください';
+      return;
+    }
+    if (this.firstName == '') {
+      this.errorMessage = '名が未入力です。全ての入力欄を記入してください';
+      return;
+    }
+    if (this.mailAddress == '') {
+      this.errorMessage =
+        'メールアドレスが未入力です。全ての入力欄を記入してください';
+      return;
+    }
+    if (this.password == '') {
+      this.errorMessage =
+        'パスワードが未入力です。全ての入力欄を記入してください';
+      return;
+    }
+    if (this.password != this.comfirmPassword) {
+      this.errorMessage = 'パスワードと確認パスワードが一致しません';
+      this.password = '';
+      this.comfirmPassword = '';
+      return;
+    }
+
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
       name: this.lastName + ' ' + this.firstName,
       mailAddress: this.mailAddress,
@@ -101,8 +151,14 @@ export default class RegisterAdmin extends Vue {
     });
     console.dir('response:' + JSON.stringify(response));
 
-    //演習1-1 管理者登録成功後の遷移先をログイン画面に変更
-    this.$router.push('/loginAdmin');
+    //演習1-3 メールの重複があったら登録できないエラーメッセージを出す。
+    if (response.data.status === 'success') {
+      //演習1-1 管理者登録成功後の遷移先をログイン画面に変更
+      this.$router.push('/loginAdmin');
+    } else if (response.data.status === 'error') {
+      this.uniqueErrorMessage = '登録できませんでした';
+      return;
+    }
   }
 }
 </script>
@@ -110,5 +166,8 @@ export default class RegisterAdmin extends Vue {
 <style scoped>
 .register-page {
   width: 600px;
+}
+.error-message {
+  color: red;
 }
 </style>
