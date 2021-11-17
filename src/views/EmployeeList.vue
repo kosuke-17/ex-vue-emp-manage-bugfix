@@ -8,6 +8,9 @@
         </div>
       </div>
     </nav>
+    <div v-for="(num, i) of getPageNum" :key="i">
+      <button type="button" @click="onchangepage(num)">{{ num }}</button>
+    </div>
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <div class="row">
       <table class="striped">
@@ -36,8 +39,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { Employee } from "@/types/employee";
+import { Component, Vue } from 'vue-property-decorator';
+import { Employee } from '@/types/employee';
 /**
  * 従業員一覧を表示する画面.
  */
@@ -47,6 +50,8 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+  // ページの初期値
+  private pageNum = 1;
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -59,7 +64,7 @@ export default class EmployeeList extends Vue {
    * 取得してからゲットするため、async awaitを利用している。
    */
   async created(): Promise<void> {
-    await this.$store.dispatch("getEmployeeList");
+    await this.$store.dispatch('getEmployeeList');
 
     // 従業員一覧情報をVuexストアから取得
     // 非同期で外部APIから取得しているので、async/await使わないとGetterで取得できない
@@ -72,7 +77,19 @@ export default class EmployeeList extends Vue {
    * @returns 現在表示されている従業員一覧の数
    */
   get getEmployeeCount(): number {
-    return this.currentEmployeeList.length;
+    this.employeeCount = this['$store'].getters.getAllEmployeeCount;
+    return this.employeeCount;
+  }
+
+  get getPageNum(): number {
+    this.pageNum = Math.ceil(this.employeeCount / 10);
+    return this.pageNum;
+  }
+
+  onchangepage(selectedPageNum: number): void {
+    this.currentEmployeeList = this['$store'].getters.getEmployeesByPageNum(
+      selectedPageNum
+    );
   }
 }
 </script>
