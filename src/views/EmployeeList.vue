@@ -26,7 +26,7 @@
                 employee.name
               }}</router-link>
             </td>
-            <td>{{ employee.hireDate }}</td>
+            <td>{{ employee.formatHireDate }}</td>
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { Employee } from "@/types/employee";
+import { Component, Vue } from 'vue-property-decorator';
+import { Employee } from '@/types/employee';
 /**
  * 従業員一覧を表示する画面.
  */
@@ -59,7 +59,7 @@ export default class EmployeeList extends Vue {
    * 取得してからゲットするため、async awaitを利用している。
    */
   async created(): Promise<void> {
-    await this.$store.dispatch("getEmployeeList");
+    await this.$store.dispatch('getEmployeeList');
 
     // 従業員一覧情報をVuexストアから取得
     // 非同期で外部APIから取得しているので、async/await使わないとGetterで取得できない
