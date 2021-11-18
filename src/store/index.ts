@@ -12,7 +12,7 @@ export default new Vuex.Store({
   state: {
     totalEmployeeCount: 0,
     employees: new Array<Employee>(),
-    auth: '',
+    userStatus: '',
   }, // end state
   actions: {
     /**
@@ -90,7 +90,7 @@ export default new Vuex.Store({
      * @param payload - ユーザーのログイン情報
      */
     changeUserStatus(state, payload) {
-      state.auth = payload.user;
+      state.userStatus = payload.user;
     },
   }, // end mutations
   getters: {
