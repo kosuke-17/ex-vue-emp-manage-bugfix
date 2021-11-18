@@ -19,7 +19,7 @@
             <tr>
               <th nowrap>従業員名</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.name"></span>
+                {{ this.currentEmployee.data.employee.name }}
               </td>
             </tr>
             <tr>
@@ -31,51 +31,51 @@
             <tr>
               <th nowrap>性別</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.gender"></span>
+                {{ this.currentEmployee.data.employee.gender }}
               </td>
             </tr>
             <tr>
               <th nowrap>入社日</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.formatHireDate"></span>
+                {{ this.currentEmployee.data.employee.formatHireDate }}
               </td>
             </tr>
             <tr>
               <th nowrap>メールアドレス</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.mailAddress"></span>
+                {{ this.currentEmployee.data.employee.mailAddress }}
               </td>
             </tr>
             <tr>
               <th nowrap>郵便番号</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.zipCode"></span>
+                {{ this.currentEmployee.data.employee.zipCode }}
               </td>
             </tr>
             <tr>
               <th nowrap>住所</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.address"></span>
+                {{ this.currentEmployee.data.employee.address }}
+
               </td>
             </tr>
             <tr>
               <th nowrap>電話番号</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.telephone"></span>
+                {{ this.currentEmployee.data.employee.telephone }} 
               </td>
             </tr>
             <tr>
               <th nowrap>給料</th>
               <td>
-                <span v-bind="this.formatCurrentEmployee.formatSalary"></span>円
+                {{ this.currentEmployee.data.employee.formatSalary }}
+                円
               </td>
             </tr>
             <tr>
               <th nowrap>特性</th>
               <td>
-                <span
-                  v-bind="this.formatCurrentEmployee.characteristics"
-                ></span>
+                {{ this.currentEmployee.data.employee.characteristics }}
               </td>
             </tr>
             <tr>
