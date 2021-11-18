@@ -157,7 +157,6 @@ export default class RegisterAdmin extends Vue {
       this.$router.push('/loginAdmin');
     } else if (response.data.status === 'error') {
       this.uniqueErrorMessage = '登録できませんでした';
-      return;
     }
   }
 }
