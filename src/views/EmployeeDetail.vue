@@ -56,13 +56,12 @@
               <th nowrap>住所</th>
               <td>
                 {{ this.currentEmployee.data.employee.address }}
-
               </td>
             </tr>
             <tr>
               <th nowrap>電話番号</th>
               <td>
-                {{ this.currentEmployee.data.employee.telephone }} 
+                {{ this.currentEmployee.data.employee.telephone }}
               </td>
             </tr>
             <tr>
@@ -156,6 +155,11 @@ export default class EmployeeDetail extends Vue {
    * ライフサイクルフックのcreatedイベント利用
    */
   async created(): Promise<void> {
+    // もしログインボタンを押して遷移していなければ従業員一覧画面を表示させない
+    if (this.$store.state.userStatus === '') {
+      this.$router.push('/loginadmin');
+      return;
+    }
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
     const employeeId = parseInt(this.$route.params.id);
 
