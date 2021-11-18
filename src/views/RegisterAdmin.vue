@@ -65,6 +65,30 @@
             />
             <label for="comfirmPassword">確認パスワード</label>
           </div>
+          <div>
+            <form class="search">
+              <div class="error-message">
+                {{ zipcodeErrorMessage }}
+              </div>
+              <br />
+              郵便番号<input
+                class="validate"
+                type="text"
+                v-model="inputZipcode"
+              />
+              <br />
+            </form>
+            <button type="button" @click="searchAddress(inputZipcode)">
+              住所検索
+            </button>
+            <br />
+            住所(ボタンまだない)<input
+              id="inputAddress"
+              type="text"
+              v-model="inputAddress"
+            />
+            <label for="inputAddress">住所</label>
+          </div>
         </div>
         <div class="row">
           <div class="input-field col s6">
@@ -108,6 +132,10 @@ export default class RegisterAdmin extends Vue {
   private errorMessage = '';
   private uniqueErrorMessage = '';
 
+  private inputZipcode = '';
+  private inputAddress = '';
+  private zipcodeErrorMessage = '';
+
   /**
    * 管理者情報を登録する.
    *
@@ -148,6 +176,7 @@ export default class RegisterAdmin extends Vue {
       name: this.lastName + ' ' + this.firstName,
       mailAddress: this.mailAddress,
       password: this.password,
+      address: this.inputAddress,
     });
     console.dir('response:' + JSON.stringify(response));
 
@@ -158,6 +187,26 @@ export default class RegisterAdmin extends Vue {
     } else if (response.data.status === 'error') {
       this.uniqueErrorMessage = '登録できませんでした';
       return;
+    }
+  }
+
+  /**
+   * 郵便番号から住所情報を取得する
+   */
+  async searchAddress(): Promise<void> {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const axiosJsonpAdapter = require('axios-jsonp');
+      const response = await axios.get('https://zipcoda.net/api', {
+        adapter: axiosJsonpAdapter,
+        params: {
+          zipcode: this.inputZipcode,
+        },
+      });
+      this.inputAddress = response.data.items[0].components.join('');
+      console.log('成功');
+    } catch (e) {
+      this.zipcodeErrorMessage = '正しい値(7桁)を入力してください';
     }
   }
 }
