@@ -83,12 +83,16 @@ export default class LoginAdmin extends Vue {
       mailAddress: this.mailAddress,
       password: this.password,
     });
-    console.dir('response:' + JSON.stringify(response));
-
 
     // 演習2-1 レスポンスのステータスで成功だったらログインできるようにした
     if (response.data.status === 'success') {
       this.$router.push('/employeeList');
+
+      // sessionStorageにユーザーのログイン状態を保存
+      sessionStorage.setItem('userStatus', 'true');
+      this['$store'].commit('changeUserStatus', {
+        user: sessionStorage.getItem('userStatus'),
+      });
     } else if (response.data.status === 'error') {
       this.errorMessage = 'ログインできませんでした';
       return;
