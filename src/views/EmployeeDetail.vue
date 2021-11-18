@@ -4,7 +4,6 @@
     <nav>
       <div class="nav-wrapper">
         <div class="col s12 teal">
-
           <router-link class="breadcrumb" to="/employeeList"
             >従業員リスト</router-link
           >
@@ -38,7 +37,7 @@
             <tr>
               <th nowrap>入社日</th>
               <td>
-                {{ this.currentEmployee.data.employee.hireDate }}
+                {{ this.currentEmployee.data.employee.formatHireDate }}
               </td>
             </tr>
             <tr>
@@ -57,18 +56,19 @@
               <th nowrap>住所</th>
               <td>
                 {{ this.currentEmployee.data.employee.address }}
+
               </td>
             </tr>
             <tr>
               <th nowrap>電話番号</th>
               <td>
-                {{ this.currentEmployee.data.employee.telephone }}
+                {{ this.currentEmployee.data.employee.telephone }} 
               </td>
             </tr>
             <tr>
               <th nowrap>給料</th>
               <td>
-                {{ this.currentEmployee.data.employee.salary }}
+                {{ this.currentEmployee.data.employee.formatSalary }}
                 円
               </td>
             </tr>
@@ -138,6 +138,7 @@ export default class EmployeeDetail extends Vue {
     0
   );
   private getCurrentEmployee!: Employee;
+  private formatCurrentEmployee!: Employee;
   // エラーメッセージ
   private errorMessage = '';
   // 画像
@@ -161,20 +162,21 @@ export default class EmployeeDetail extends Vue {
     this.getCurrentEmployee = await axios.get(
       `${config.EMP_WEBAPI_URL}/employee/${employeeId}`
     );
+    this.formatCurrentEmployee = this.getCurrentEmployee.data.employee;
 
     this.currentEmployee = new Employee(
-      this.getCurrentEmployee.data.employee.id,
-      this.getCurrentEmployee.data.employee.name,
-      this.getCurrentEmployee.data.employee.image,
-      this.getCurrentEmployee.data.employee.gender,
-      new Date(this.getCurrentEmployee.data.employee.hireDate),
-      this.getCurrentEmployee.data.employee.mailAddress,
-      this.getCurrentEmployee.data.employee.zipCode,
-      this.getCurrentEmployee.data.employee.address,
-      this.getCurrentEmployee.data.employee.telephone,
-      this.getCurrentEmployee.data.employee.salary,
-      this.getCurrentEmployee.data.employee.characteristics,
-      this.getCurrentEmployee.data.employee.dependentsCount
+      this.formatCurrentEmployee.id,
+      this.formatCurrentEmployee.name,
+      this.formatCurrentEmployee.image,
+      this.formatCurrentEmployee.gender,
+      new Date(this.formatCurrentEmployee.hireDate),
+      this.formatCurrentEmployee.mailAddress,
+      this.formatCurrentEmployee.zipCode,
+      this.formatCurrentEmployee.address,
+      this.formatCurrentEmployee.telephone,
+      this.formatCurrentEmployee.salary,
+      this.formatCurrentEmployee.characteristics,
+      this.formatCurrentEmployee.dependentsCount
     );
     console.log(JSON.stringify(this.currentEmployee));
 

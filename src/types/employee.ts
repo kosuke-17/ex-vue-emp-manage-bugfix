@@ -38,7 +38,7 @@ export class Employee {
     return format(this.hireDate, 'yyyy年MM月dd日');
   }
 
-  get getSalary(): string {
+  get formatSalary(): string {
     return this.salary.toLocaleString();
   }
 
