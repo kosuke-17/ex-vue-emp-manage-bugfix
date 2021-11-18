@@ -142,6 +142,18 @@ export default new Vuex.Store({
         );
       };
     },
+    /**
+     * 渡ってきたページ番号に表示するための従業員情報を返す
+     * @param state - ステート
+     * @returns ページに表示する従業員情報
+     */
+    getEmployeesByPageNum(state) {
+      return (pageNum: number) => {
+        console.log(pageNum);
+
+        return state.employees.slice((pageNum - 1) * 10, 10 * pageNum - 1);
+      };
+    },
   }, // end getters
   modules: {}, // end modules
 });

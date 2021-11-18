@@ -8,6 +8,9 @@
         </div>
       </div>
     </nav>
+    <div v-for="(num, i) of getPageNum" :key="i">
+      <button type="button" @click="onchangepage(num)">{{ num }}</button>
+    </div>
     <div>
       <form class="search">
         <input type="text" v-model="inputName" />
@@ -16,6 +19,7 @@
       <button @click="searchEmployee(inputName)">従業員検索</button>
     </div>
     {{ searchedMessage }}
+
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <div class="row">
       <table class="striped">
@@ -55,9 +59,14 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+
+  // ページの初期値
+  private pageNum = 1;
+  
   //名前検索用の入力変数
   private inputName = '';
   private searchedMessage = '';
+
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -83,11 +92,29 @@ export default class EmployeeList extends Vue {
    * @returns 現在表示されている従業員一覧の数
    */
   get getEmployeeCount(): number {
-    return this.currentEmployeeList.length;
+    this.employeeCount = this['$store'].getters.getAllEmployeeCount;
+    return this.employeeCount;
   }
 
   /**
-   * 名前検索をする
+   * ページ数の取得する.
+   */
+  get getPageNum(): number {
+    this.pageNum = Math.ceil(this.employeeCount / 10);
+    return this.pageNum;
+  }
+
+  /**
+   * 指定したページに表示する従業員情報を取得する.
+   */
+  onchangepage(selectedPageNum: number): void {
+    this.currentEmployeeList = this['$store'].getters.getEmployeesByPageNum(
+      selectedPageNum
+    );
+  }
+
+  /**
+   * 名前検索をする.
    *
    *
    */
