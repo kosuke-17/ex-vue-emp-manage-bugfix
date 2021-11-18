@@ -96,11 +96,17 @@ export default class EmployeeList extends Vue {
     return this.employeeCount;
   }
 
+  /**
+   * ページ数の取得する.
+   */
   get getPageNum(): number {
     this.pageNum = Math.ceil(this.employeeCount / 10);
     return this.pageNum;
   }
 
+  /**
+   * 指定したページに表示する従業員情報を取得する.
+   */
   onchangepage(selectedPageNum: number): void {
     this.currentEmployeeList = this['$store'].getters.getEmployeesByPageNum(
       selectedPageNum
@@ -108,7 +114,7 @@ export default class EmployeeList extends Vue {
   }
 
   /**
-   * 名前検索をする
+   * 名前検索をする.
    *
    *
    */
