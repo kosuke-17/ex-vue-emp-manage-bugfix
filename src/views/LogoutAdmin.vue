@@ -2,9 +2,9 @@
   <div>ログアウト中・・・</div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import config from "@/const/const";
-import axios from "axios";
+import { Component, Vue } from 'vue-property-decorator';
+import config from '@/const/const';
+import axios from 'axios';
 
 /**
  * ログアウトをする画面.
@@ -20,10 +20,15 @@ export default class LogoutAdmin extends Vue {
    * @returns Promiseオブジェクト
    */
   async created(): Promise<void> {
-    const response = await axios.get(`${config.EMP_WEBAPI_URL}/logout`);
-    console.dir("response:" + JSON.stringify(response));
+    await axios.get(`${config.EMP_WEBAPI_URL}/logout`);
+    // console.dir('response:' + JSON.stringify(response));
     // ログイン画面に遷移する
-    this.$router.push("/loginAdmin");
+    this.$router.push('/loginAdmin');
+    // 'false'だと文字列が含まれてtrueの状態のため、空文字にしている
+    sessionStorage.setItem('userStatus', '');
+    this['$store'].commit('changeUserStatus', {
+      user: sessionStorage.getItem('userStatus'),
+    });
   }
 }
 </script>
