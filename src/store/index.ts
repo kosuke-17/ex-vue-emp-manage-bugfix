@@ -44,6 +44,7 @@ export default new Vuex.Store({
      * @param payload WebAPIから取得した従業員情報(JSON)
      */
     showEmployeeList(state, payload) {
+
       // payloadの中(WebAPIから取得したJSON)のtotalEmployeeCountをstateのtotalEmployeeCountに代入する
       state.totalEmployeeCount = payload.totalEmployeeCount;
       // payloadの中(WebAPIから取得したJSON)のemployeesをstateのemployeesに代入する
@@ -59,7 +60,7 @@ export default new Vuex.Store({
             employee.name,
             employee.image,
             employee.gender,
-            employee.hireDate,
+            new Date(employee.hireDate),
             employee.mailAddress,
             employee.zipCode,
             employee.address,
