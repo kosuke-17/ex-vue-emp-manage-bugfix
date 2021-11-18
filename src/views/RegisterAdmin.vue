@@ -3,11 +3,13 @@
     <div class="row register-page">
       <form class="col s12" id="reg-form">
         <div class="error-message">
-          {{ errorMessage }}
           {{ uniqueErrorMessage }}
         </div>
         <div class="row">
           <div class="input-field col s6">
+            <div class="error-message">
+              {{ lastNameErrorMessage }}
+            </div>
             <input
               id="last_name"
               type="text"
@@ -18,6 +20,9 @@
             <label for="last_name">姓</label>
           </div>
           <div class="input-field col s6">
+            <div class="error-message">
+              {{ firstNameErrorMessage }}
+            </div>
             <input
               id="first_name"
               type="text"
@@ -30,6 +35,9 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <div class="error-message">
+              {{ mailAddressErrorMessage }}
+            </div>
             <input
               id="email"
               type="email"
@@ -42,6 +50,9 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <div class="error-message">
+              {{ passwordErrorMessage }}
+            </div>
             <input
               id="password"
               type="password"
@@ -55,6 +66,9 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <div class="error-message">
+              {{ comfirmPasswordErrorMessage }}
+            </div>
             <input
               id="comfirmPassword"
               type="password"
@@ -129,8 +143,13 @@ export default class RegisterAdmin extends Vue {
   private comfirmPassword = '';
 
   // エラーメッセージ
-  private errorMessage = '';
+  private lastNameErrorMessage = '';
+  private firstNameErrorMessage = '';
+  private mailAddressErrorMessage = '';
+  private passwordErrorMessage = '';
+  private comfirmPasswordErrorMessage = '';
   private uniqueErrorMessage = '';
+  private errorFlag = false;
 
   private inputZipcode = '';
   private inputAddress = '';
@@ -148,27 +167,36 @@ export default class RegisterAdmin extends Vue {
 
     // 演習1-2 未入力の場合、処理終了
     if (this.lastName == '') {
-      this.errorMessage = '姓の欄が未入力です。全ての入力欄を記入してください';
-      return;
+      this.lastNameErrorMessage = '姓が未入力です。';
+      this.errorFlag = true;
     }
     if (this.firstName == '') {
-      this.errorMessage = '名が未入力です。全ての入力欄を記入してください';
-      return;
+      this.firstNameErrorMessage = '名が未入力です。';
+      this.errorFlag = true;
     }
     if (this.mailAddress == '') {
-      this.errorMessage =
-        'メールアドレスが未入力です。全ての入力欄を記入してください';
-      return;
+      this.mailAddressErrorMessage = 'メールアドレスが未入力です。';
+      this.errorFlag = true;
     }
     if (this.password == '') {
-      this.errorMessage =
-        'パスワードが未入力です。全ての入力欄を記入してください';
-      return;
+      this.passwordErrorMessage = 'パスワードが未入力です。';
+      this.errorFlag = true;
+    }
+    if (this.comfirmPassword == '') {
+      this.comfirmPasswordErrorMessage = '確認パスワードが未入力です。';
+      this.errorFlag = true;
     }
     if (this.password != this.comfirmPassword) {
-      this.errorMessage = 'パスワードと確認パスワードが一致しません';
+      this.comfirmPasswordErrorMessage =
+        'パスワードと確認パスワードが一致しません';
       this.password = '';
       this.comfirmPassword = '';
+      this.errorFlag = true;
+    }
+
+    // エラーがあったら処理終了
+    if (this.errorFlag) {
+      this.errorFlag = false;
       return;
     }
 
@@ -217,6 +245,7 @@ export default class RegisterAdmin extends Vue {
   width: 600px;
 }
 .error-message {
+  font-size: 5px;
   color: red;
 }
 </style>
