@@ -139,6 +139,7 @@ export default class EmployeeDetail extends Vue {
   );
   private getCurrentEmployee!: Employee;
   private formatCurrentEmployee!: Employee;
+
   // エラーメッセージ
   private errorMessage = '';
   // 画像
@@ -159,24 +160,24 @@ export default class EmployeeDetail extends Vue {
     const employeeId = parseInt(this.$route.params.id);
 
     // VuexストアのGetter、getEmployeeById()メソッドに先ほど取得したIDを渡し、１件の従業員情報を取得し、戻り値をcurrentEmployee属性に代入する
-    this.getCurrentEmployee = await axios.get(
+    const response = await axios.get(
       `${config.EMP_WEBAPI_URL}/employee/${employeeId}`
     );
     this.formatCurrentEmployee = this.getCurrentEmployee.data.employee;
 
     this.currentEmployee = new Employee(
-      this.formatCurrentEmployee.id,
-      this.formatCurrentEmployee.name,
-      this.formatCurrentEmployee.image,
-      this.formatCurrentEmployee.gender,
-      new Date(this.formatCurrentEmployee.hireDate),
-      this.formatCurrentEmployee.mailAddress,
-      this.formatCurrentEmployee.zipCode,
-      this.formatCurrentEmployee.address,
-      this.formatCurrentEmployee.telephone,
-      this.formatCurrentEmployee.salary,
-      this.formatCurrentEmployee.characteristics,
-      this.formatCurrentEmployee.dependentsCount
+      response.data.employee.id,
+      response.data.employee.name,
+      response.data.employee.image,
+      response.data.employee.gender,
+      new Date(response.data.employee.hireDate),
+      response.data.employee.mailAddress,
+      response.data.employee.zipCode,
+      response.data.employee.address,
+      response.data.employee.telephone,
+      response.data.employee.salary,
+      response.data.employee.characteristics,
+      response.data.employee.dependentsCount
     );
     console.log(JSON.stringify(this.currentEmployee));
 
