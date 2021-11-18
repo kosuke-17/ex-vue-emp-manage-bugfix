@@ -4,8 +4,11 @@
     <nav>
       <div class="nav-wrapper">
         <div class="col s12 teal">
-          <a class="breadcrumb" href="/employeeList">従業員リスト</a>
-          <a class="breadcrumb">従業員詳細</a>
+
+          <router-link class="breadcrumb" to="/employeeList"
+            >従業員リスト</router-link
+          >
+          <router-link class="breadcrumb">従業員詳細</router-link>
         </div>
       </div>
     </nav>
@@ -17,7 +20,7 @@
             <tr>
               <th nowrap>従業員名</th>
               <td>
-                <span v-html="this.currentEmployee.data.employee.name"></span>
+                <span v-bind="this.currentEmployee.data.employee.name"></span>
               </td>
             </tr>
             <tr>
@@ -29,18 +32,22 @@
             <tr>
               <th nowrap>性別</th>
               <td>
-                <span v-html="this.currentEmployee.data.employee.gender"></span>
+                <span v-bind="this.currentEmployee.data.employee.gender"></span>
               </td>
             </tr>
             <tr>
               <th nowrap>入社日</th>
-              <td><span v-html="currentEmployee.formatHireDate"></span></td>
+              <td>
+                <span
+                  v-bind="this.currentEmployee.data.employee.hireDate"
+                ></span>
+              </td>
             </tr>
             <tr>
               <th nowrap>メールアドレス</th>
               <td>
                 <span
-                  v-html="this.currentEmployee.data.employee.mailAddress"
+                  v-bind="this.currentEmployee.data.employee.mailAddress"
                 ></span>
               </td>
             </tr>
@@ -48,7 +55,7 @@
               <th nowrap>郵便番号</th>
               <td>
                 <span
-                  v-html="this.currentEmployee.data.employee.zipCode"
+                  v-bind="this.currentEmployee.data.employee.zipCode"
                 ></span>
               </td>
             </tr>
@@ -56,7 +63,7 @@
               <th nowrap>住所</th>
               <td>
                 <span
-                  v-html="this.currentEmployee.data.employee.address"
+                  v-bind="this.currentEmployee.data.employee.address"
                 ></span>
               </td>
             </tr>
@@ -64,21 +71,22 @@
               <th nowrap>電話番号</th>
               <td>
                 <span
-                  v-html="this.currentEmployee.data.employee.telephone"
+                  v-bind="this.currentEmployee.data.employee.telephone"
                 ></span>
               </td>
             </tr>
             <tr>
               <th nowrap>給料</th>
               <td>
-                <span v-html="currentEmployee.salary.toLocaleString()"></span>円
+                <span v-bind="this.currentEmployee.data.employee.salary"></span
+                >円
               </td>
             </tr>
             <tr>
               <th nowrap>特性</th>
               <td>
                 <span
-                  v-html="this.currentEmployee.data.employee.characteristics"
+                  v-bind="this.currentEmployee.data.employee.characteristics"
                 ></span>
               </td>
             </tr>
@@ -141,7 +149,7 @@ export default class EmployeeDetail extends Vue {
     'XXXX',
     0
   );
-  // currentEmployee!: Employee;
+  private getCurrentEmployee!: Employee;
   // エラーメッセージ
   private errorMessage = '';
   // 画像
@@ -162,15 +170,31 @@ export default class EmployeeDetail extends Vue {
     const employeeId = parseInt(this.$route.params.id);
 
     // VuexストアのGetter、getEmployeeById()メソッドに先ほど取得したIDを渡し、１件の従業員情報を取得し、戻り値をcurrentEmployee属性に代入する
-    this.currentEmployee = await axios.get(
+    this.getCurrentEmployee = await axios.get(
       `${config.EMP_WEBAPI_URL}/employee/${employeeId}`
     );
 
+    this.currentEmployee = new Employee(
+      this.getCurrentEmployee.data.employee.id,
+      this.getCurrentEmployee.data.employee.name,
+      this.getCurrentEmployee.data.employee.image,
+      this.getCurrentEmployee.data.employee.gender,
+      new Date(this.getCurrentEmployee.data.employee.hireDate),
+      this.getCurrentEmployee.data.employee.mailAddress,
+      this.getCurrentEmployee.data.employee.zipCode,
+      this.getCurrentEmployee.data.employee.address,
+      this.getCurrentEmployee.data.employee.telephone,
+      this.getCurrentEmployee.data.employee.salary,
+      this.getCurrentEmployee.data.employee.characteristics,
+      this.getCurrentEmployee.data.employee.dependentsCount
+    );
+    console.log(JSON.stringify(this.currentEmployee));
+
     // 今取得した従業員情報から画像パスを取り出し、imgディレクトリの名前を前に付与(文字列連結)してcurrentEmployeeImage属性に代入する
-    this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.data.employee.image}`;
+    this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.image}`;
 
     // 今取得した従業員情報から扶養人数を取り出し、currentDependentsCount属性に代入する
-    this.currentDependentsCount = this.currentEmployee.data.employee.dependentsCount;
+    this.currentDependentsCount = this.currentEmployee.dependentsCount;
   }
 
   /**
