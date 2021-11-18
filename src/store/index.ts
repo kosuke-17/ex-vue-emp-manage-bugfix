@@ -86,11 +86,11 @@ export default new Vuex.Store({
     },
     /**
      * ログイン状態を変更する
-     * @param context - コンテクスト
+     * @param state - ステート
      * @param payload - ユーザーのログイン情報
      */
-    changeUserStatus(context, payload) {
-      context.auth = payload.user;
+    changeUserStatus(state, payload) {
+      state.auth = payload.user;
     },
   }, // end mutations
   getters: {
