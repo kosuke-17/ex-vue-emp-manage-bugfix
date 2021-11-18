@@ -61,7 +61,7 @@ export default new Vuex.Store({
             employee.name,
             employee.image,
             employee.gender,
-            employee.hireDate,
+            new Date(employee.hireDate),
             employee.mailAddress,
             employee.zipCode,
             employee.address,
