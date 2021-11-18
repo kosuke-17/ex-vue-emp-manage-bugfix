@@ -12,6 +12,7 @@ export default new Vuex.Store({
   state: {
     totalEmployeeCount: 0,
     employees: new Array<Employee>(),
+    userStatus: '',
   }, // end state
   actions: {
     /**
@@ -43,8 +44,6 @@ export default new Vuex.Store({
      * @param payload WebAPIから取得した従業員情報(JSON)
      */
     showEmployeeList(state, payload) {
-      // console.dir("payload:" + JSON.stringify(payload));
-      // console.log('totalEmployeeCount:' + payload.totalEmployeeCount);
 
       // payloadの中(WebAPIから取得したJSON)のtotalEmployeeCountをstateのtotalEmployeeCountに代入する
       state.totalEmployeeCount = payload.totalEmployeeCount;
@@ -85,6 +84,14 @@ export default new Vuex.Store({
 
         return 0;
       });
+    },
+    /**
+     * ログイン状態を変更する
+     * @param state - ステート
+     * @param payload - ユーザーのログイン情報
+     */
+    changeUserStatus(state, payload) {
+      state.userStatus = payload.user;
     },
   }, // end mutations
   getters: {
