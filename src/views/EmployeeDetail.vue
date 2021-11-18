@@ -156,8 +156,9 @@ export default class EmployeeDetail extends Vue {
    */
   async created(): Promise<void> {
     // もしログインボタンを押して遷移していなければ従業員一覧画面を表示させない
-    if(this.$store.state.userStatus === '') {
+    if (this.$store.state.userStatus === '') {
       this.$router.push('/loginadmin');
+      return;
     }
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
     const employeeId = parseInt(this.$route.params.id);

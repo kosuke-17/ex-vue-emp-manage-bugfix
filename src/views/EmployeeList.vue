@@ -62,11 +62,10 @@ export default class EmployeeList extends Vue {
 
   // ページの初期値
   private pageNum = 1;
-  
+
   //名前検索用の入力変数
   private inputName = '';
   private searchedMessage = '';
-
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -80,10 +79,11 @@ export default class EmployeeList extends Vue {
    */
   async created(): Promise<void> {
     // もしログインボタンを押して遷移していなければ従業員一覧画面を表示させない
-    if(this.$store.state.userStatus === '') {
+    if (this.$store.state.userStatus === '') {
       this.$router.push('/loginadmin');
+      return;
     }
-    
+
     await this.$store.dispatch('getEmployeeList');
 
     // 従業員一覧情報をVuexストアから取得
